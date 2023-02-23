@@ -10,6 +10,8 @@ class SetAlarmScreen extends StatefulWidget {
 }
 
 class _SetAlarmScreen extends State<SetAlarmScreen> {
+  String _snoozeTime = 'Set';
+
   int _currentHour = DateTime.now().hour;
   int _currentMinute = DateTime.now().minute;
 
@@ -19,7 +21,7 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
       backgroundColor: Colors.amber[100],
       appBar: AppBar(
         backgroundColor: Colors.blueAccent[300],
-        title: const Text("Set Alarm", style: TextStyle(fontSize: 40),),
+        title: const Text("Set Alarm", style: TextStyle(fontSize: 40, fontFamily: "Chakra")),
       ),
       body: SafeArea (
         child: Center(
@@ -86,19 +88,23 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) {
-                                return const SetSnoozeScreen();
-                              }
-                            )
-                          );
+                              builder: (context) => SetSnoozeScreen()
+                            ),
+                          ).then((value) {
+                            print(value);
+                            if (value != null) {
+                              setState(() {
+                                _snoozeTime = value.toString();
+                              });
+                            }
+                          });
                         },
-                        child: const Text("Set", style: TextStyle(fontSize: 30, ), textAlign: TextAlign.center),
+                        child: Text(_snoozeTime, style: const TextStyle(fontSize: 30, fontFamily: "Chakra"), textAlign: TextAlign.center),
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(),
               Container(),
             ],
           ),

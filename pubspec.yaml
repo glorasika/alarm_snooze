@@ -43,6 +43,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Anton
+      fonts:
+        - asset: fonts/Anton-Regular.ttf
+
+    - family: Chakra
+      fonts:
+        - asset: fonts/ChakraPetch-Medium.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -60,7 +68,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+#   fonts:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

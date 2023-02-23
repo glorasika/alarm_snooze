@@ -9,7 +9,8 @@ class SetSnoozeScreen extends StatefulWidget {
 }
 
 class _SetSnoozeScreen extends State<SetSnoozeScreen> {
-  int _currentSnoozeTime = 5;
+  int _snoozeMinute = 5;
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
       backgroundColor: Colors.amber[100],
       appBar: AppBar(
         backgroundColor: Colors.blueAccent[300],
-        title: const Text("Set Snooze", style: TextStyle(fontSize: 40)),
+        title: const Text("Set Snooze", style: TextStyle(fontSize: 40, fontFamily: "Chakra")),
       ),
       body: SafeArea(
         child: Center(
@@ -25,7 +26,7 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(top: 40),
-                padding: const EdgeInsets.fromLTRB(47, 25, 47, 25),
+                padding: const EdgeInsets.fromLTRB(47, 22, 47, 22),
                 width: 300,
                 decoration: BoxDecoration(
                   // color: Colors.,
@@ -35,7 +36,7 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
                     )
                 ),
                 child: NumberPicker (
-                  value: _currentSnoozeTime,
+                  value: _snoozeMinute,
                   minValue: 1,
                   maxValue: 15,
                   step: 1,
@@ -44,10 +45,24 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
                   infiniteLoop: true,
                   textStyle: const TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
                   selectedTextStyle: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Colors.red),
-                  onChanged: (value) => setState(() => _currentSnoozeTime = value),
+                  onChanged: (value) => setState(() => _snoozeMinute = value),
                 ),
               ),
-              Container(),
+              Container(
+                width: 300,
+                height: 90,
+                margin: const EdgeInsets.only(top: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context, _snoozeMinute);
+                  },
+                  child: const Text("Set", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Chakra"),),
+                ),
+              ),
             ],
           ),
         ),
