@@ -18,7 +18,7 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
       backgroundColor: Colors.amber[100],
       appBar: AppBar(
         backgroundColor: Colors.blueAccent[300],
-        title: const Text("Set Snooze", style: TextStyle(fontSize: 40, fontFamily: "Chakra")),
+        title: const Text("Set Snooze", style: TextStyle(fontSize: 40, fontFamily: "Chakra", fontWeight: FontWeight.bold, letterSpacing: 1)),
       ),
       body: SafeArea(
         child: Center(
@@ -43,8 +43,8 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
                   itemHeight: 95,
                   itemCount: 5,
                   infiniteLoop: true,
-                  textStyle: const TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
-                  selectedTextStyle: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Colors.red),
+                  textStyle: const TextStyle(fontSize: 38, fontFamily: "Chakra", fontWeight: FontWeight.w700),
+                  selectedTextStyle: const TextStyle(fontSize: 50, fontFamily: "Chakra", fontWeight: FontWeight.bold, color: Colors.red),
                   onChanged: (value) => setState(() => _snoozeMinute = value),
                 ),
               ),
