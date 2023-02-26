@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/set_alarm_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alarm/alarm.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,11 +21,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   List<String> _alarms = [];
-  bool isSwitched = false;
+  List<bool> isSwitched = [];
+
+
+  void createNewAlarm(DateTime date, String audioPath) async {
+    await Alarm.init();
+    final alarmSettings = AlarmSettings(
+      dateTime: date,
+      assetAudioPath: audioPath,
+      loopAudio: true,
+      notificationTitle: 'This is the title',
+      notificationBody: 'This is the body',
+      enableNotificationOnKill: true,
+    );
+    await Alarm.set(settings: alarmSettings);
+  }
+
+  void checkalarm(int hour, int min, int sec) {
+    print("$hour : $min : $sec");
+    for(var i  = 0 ; i < _alarms.length ; i++) {
+      Map<String, dynamic> map = json.decode(_alarms[i]);
+      // print(map);
+      if (isSwitched[i] && map['hour'] == hour && map['minute'] == min && sec == 0) {
+        playSound(map['sound']);
+        
+      }
+    }
+  }
+
+  void playSound(String name) {
+    AudioPlayer().play(AssetSource('sound/$name.mp3'));
+  }
 
   void _savedAlarms() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setStringList('alarms', _alarms);
+    _alarms = prefs.getStringList('alarms')??_alarms;
+    isSwitched = (prefs.getStringList('alarms') as List<String>).map((e) => json.decode(e)['switch'] as bool).toList();
   }
 
   void _addAlarm(hour, minute, snooze, sound) async {
@@ -33,13 +67,21 @@ class _HomeScreenState extends State<HomeScreen> {
         '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime, "sound": "$_alarmSound", "switch": "false"}');
     prefs.setStringList('alarms', newAlarm!);
     _alarms = newAlarm;
+    isSwitched = _alarms.map((e) => json.decode(e)['switch'] == 'true'? true : false).toList();
     // print(json.decode(newAlarm[0]));
   }
+  Timer? timer;
 
   @override
   void initState() {
     _savedAlarms();
     super.initState();
+    Timer mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      DateTime timenow = DateTime.now();  //get current date and time
+      String time = timenow.hour.toString() + ":" + timenow.minute.toString() + ":" + timenow.second.toString();
+      checkalarm(timenow.hour, timenow.minute, timenow.second);
+    });
+    // mytimer.cancel();
   }
 
   @override
@@ -88,17 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: FittedBox(
                                     fit: BoxFit.fill,
                                     child: Switch(
-                                      value: isSwitched,
+                                      value: isSwitched[index],
                                       // value: (json.decode(_alarms[index])['switch'].toString().toLowerCase() == 'true' ? true : false),
                                       onChanged: (value) {
                                         setState(() {
-                                          isSwitched = value;
-                                        // json.decode(_alarms[index])['switch'] = newValue=='true' ? true:false;
-                                          // if (isSwitched == true) {
-                                          //   if (json.decode(_alarms[index])['hour'] == DateTime.now().hour && json.decode(_alarms[index])['minute'] == DateTime.now().minute) {
-                                          //     AudioPlayer().play(AssetSource('sound/${json.decode(_alarms[index])['sound']}.mp3'));
-                                          //   }
-                                          // }
+                                          isSwitched[index] = value;
                                         });
                                       },
                                       activeTrackColor: Colors.lightGreenAccent,
