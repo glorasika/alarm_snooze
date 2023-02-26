@@ -160,8 +160,7 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      AlarmSoundScreen()),
+                                  builder: (context) => AlarmSoundScreen()),
                             ).then((value) {
                               setState(() {
                                 _alarmSound = value;
@@ -173,7 +172,8 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                             style: const TextStyle(
                                 fontSize: 25,
                                 fontFamily: "Chakra",
-                                fontWeight: FontWeight.bold, letterSpacing: 2),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2),
                           ),
                         ),
                       ),
@@ -190,8 +190,12 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pop(
-                          context, [_currentHour, _currentMinute, _snoozeTime, _alarmSound]);
+                      Navigator.pop(context, [
+                        _currentHour,
+                        _currentMinute,
+                        _snoozeTime,
+                        _alarmSound
+                      ]);
                     },
                     child: const Text(
                       "Create",

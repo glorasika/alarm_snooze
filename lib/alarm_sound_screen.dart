@@ -47,8 +47,7 @@ class AlarmSoundScreen extends StatelessWidget {
                                 fontFamily: 'Chakra',
                                 letterSpacing: 1),
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       margin: const EdgeInsets.only(top: 50),
                       height: 80,
@@ -62,7 +61,10 @@ class AlarmSoundScreen extends StatelessWidget {
                           _alarmSound = 'alarm1';
                           Navigator.pop(context, _alarmSound);
                         },
-                        child: const Text("choose", style: TextStyle(fontSize: 35, fontFamily: "Chakra"),),
+                        child: const Text(
+                          "choose",
+                          style: TextStyle(fontSize: 35, fontFamily: "Chakra"),
+                        ),
                       ),
                     ),
                   ],
@@ -90,8 +92,7 @@ class AlarmSoundScreen extends StatelessWidget {
                                 fontFamily: 'Chakra',
                                 letterSpacing: 1),
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       margin: const EdgeInsets.only(top: 30),
                       height: 80,
@@ -105,7 +106,10 @@ class AlarmSoundScreen extends StatelessWidget {
                           _alarmSound = 'alarm2';
                           Navigator.pop(context, _alarmSound);
                         },
-                        child: const Text("choose", style: TextStyle(fontSize: 35, fontFamily: "Chakra"),),
+                        child: const Text(
+                          "choose",
+                          style: TextStyle(fontSize: 35, fontFamily: "Chakra"),
+                        ),
                       ),
                     ),
                   ],
@@ -133,8 +137,7 @@ class AlarmSoundScreen extends StatelessWidget {
                                 fontFamily: 'Chakra',
                                 letterSpacing: 1),
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       margin: const EdgeInsets.only(top: 30),
                       height: 80,
@@ -148,7 +151,10 @@ class AlarmSoundScreen extends StatelessWidget {
                           _alarmSound = 'alarm3';
                           Navigator.pop(context, _alarmSound);
                         },
-                        child: const Text("choose", style: TextStyle(fontSize: 35, fontFamily: "Chakra"),),
+                        child: const Text(
+                          "choose",
+                          style: TextStyle(fontSize: 35, fontFamily: "Chakra"),
+                        ),
                       ),
                     ),
                   ],
@@ -176,8 +182,7 @@ class AlarmSoundScreen extends StatelessWidget {
                                 fontFamily: 'Chakra',
                                 letterSpacing: 1),
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       margin: const EdgeInsets.only(top: 30),
                       height: 80,
@@ -191,7 +196,10 @@ class AlarmSoundScreen extends StatelessWidget {
                           _alarmSound = 'alarm4';
                           Navigator.pop(context, _alarmSound);
                         },
-                        child: const Text("choose", style: TextStyle(fontSize: 35, fontFamily: "Chakra"),),
+                        child: const Text(
+                          "choose",
+                          style: TextStyle(fontSize: 35, fontFamily: "Chakra"),
+                        ),
                       ),
                     ),
                   ],
@@ -219,8 +227,7 @@ class AlarmSoundScreen extends StatelessWidget {
                                 fontFamily: 'Chakra',
                                 letterSpacing: 1),
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       margin: const EdgeInsets.only(top: 30),
                       height: 80,
@@ -234,7 +241,10 @@ class AlarmSoundScreen extends StatelessWidget {
                           _alarmSound = 'alarm5';
                           Navigator.pop(context, _alarmSound);
                         },
-                        child: const Text("choose", style: TextStyle(fontSize: 35, fontFamily: "Chakra"),),
+                        child: const Text(
+                          "choose",
+                          style: TextStyle(fontSize: 35, fontFamily: "Chakra"),
+                        ),
                       ),
                     ),
                   ],

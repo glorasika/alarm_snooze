@@ -4,7 +4,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/set_alarm_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:alarm/alarm.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,29 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
   late final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   List<String> _alarms = [];
   List<bool> isSwitched = [];
-
-
-  void createNewAlarm(DateTime date, String audioPath) async {
-    await Alarm.init();
-    final alarmSettings = AlarmSettings(
-      dateTime: date,
-      assetAudioPath: audioPath,
-      loopAudio: true,
-      notificationTitle: 'This is the title',
-      notificationBody: 'This is the body',
-      enableNotificationOnKill: true,
-    );
-    await Alarm.set(settings: alarmSettings);
-  }
+  List<bool> isStarted = [];
 
   void checkalarm(int hour, int min, int sec) {
     print("$hour : $min : $sec");
-    for(var i  = 0 ; i < _alarms.length ; i++) {
+    for (var i = 0; i < _alarms.length; i++) {
       Map<String, dynamic> map = json.decode(_alarms[i]);
-      // print(map);
-      if (isSwitched[i] && map['hour'] == hour && map['minute'] == min && sec == 0) {
+      bool minValid = ((min - map['minute']) % map['snooze']) == 0;
+      if (isSwitched[i] && map['hour'] >= hour && minValid && sec == 0) {
         playSound(map['sound']);
-        
+        isStarted[i] = true;
       }
     }
   }
@@ -56,20 +42,30 @@ class _HomeScreenState extends State<HomeScreen> {
   void _savedAlarms() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setStringList('alarms', _alarms);
-    _alarms = prefs.getStringList('alarms')??_alarms;
-    isSwitched = (prefs.getStringList('alarms') as List<String>).map((e) => json.decode(e)['switch'] as bool).toList();
+    _alarms = prefs.getStringList('alarms') ?? _alarms;
+    isSwitched = (prefs.getStringList('alarms') as List<String>)
+        .map((e) => json.decode(e)['switch'] as bool)
+        .toList();
+    isStarted = (prefs.getStringList('alarms') as List<String>)
+        .map((e) => json.decode(e)['started'] as bool)
+        .toList();
   }
 
   void _addAlarm(hour, minute, snooze, sound) async {
     final SharedPreferences prefs = await _prefs;
     List<String>? newAlarm = prefs.getStringList('alarms');
     newAlarm?.add(
-        '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime, "sound": "$_alarmSound", "switch": "false"}');
+        '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime, "sound": "$_alarmSound", "switch": "false", "started": "false"}');
     prefs.setStringList('alarms', newAlarm!);
     _alarms = newAlarm;
-    isSwitched = _alarms.map((e) => json.decode(e)['switch'] == 'true'? true : false).toList();
-    // print(json.decode(newAlarm[0]));
+    isSwitched = _alarms
+        .map((e) => json.decode(e)['switch'] == 'true' ? true : false)
+        .toList();
+    isStarted = _alarms
+        .map((e) => json.decode(e)['started'] == 'true' ? true : false)
+        .toList();
   }
+
   Timer? timer;
 
   @override
@@ -77,11 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _savedAlarms();
     super.initState();
     Timer mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      DateTime timenow = DateTime.now();  //get current date and time
-      String time = timenow.hour.toString() + ":" + timenow.minute.toString() + ":" + timenow.second.toString();
+      DateTime timenow = DateTime.now(); //get current date and time
+      String time = timenow.hour.toString() +
+          ":" +
+          timenow.minute.toString() +
+          ":" +
+          timenow.second.toString();
       checkalarm(timenow.hour, timenow.minute, timenow.second);
     });
-    // mytimer.cancel();
   }
 
   @override
@@ -110,28 +109,38 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               children: <Widget>[
                                 Container(
-                                  margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text(
-                                    "${json.decode(_alarms[index])['hour'] / 10 < 1 ?
-                                    "0${json.decode(_alarms[index])['hour']}" : json.decode(_alarms[index])['hour']}"
-                                        ":${json.decode(_alarms[index])['minute'] / 10 < 1 ?
-                                    "0${json.decode(_alarms[index])['minute']}" : json.decode(_alarms[index])['minute']}",
-                                    style:
-                                    const TextStyle(color: Colors.white, fontSize: 50, fontFamily: 'Anton', letterSpacing: 6),
+                                    "${json.decode(_alarms[index])['hour'] / 10 < 1 ? "0${json.decode(_alarms[index])['hour']}" : json.decode(_alarms[index])['hour']}"
+                                    ":${json.decode(_alarms[index])['minute'] / 10 < 1 ? "0${json.decode(_alarms[index])['minute']}" : json.decode(_alarms[index])['minute']}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 50,
+                                        fontFamily: 'Anton',
+                                        letterSpacing: 6),
                                   ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.fromLTRB(10, 30, 0, 0),
-                                  child: Text("snooze: ${json.decode(_alarms[index])['snooze']}", style: const TextStyle(color: Colors.white, fontSize: 25, fontFamily: 'Anton', letterSpacing: 2),),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 30, 0, 0),
+                                  child: Text(
+                                    "snooze: ${json.decode(_alarms[index])['snooze']}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontFamily: 'Anton',
+                                        letterSpacing: 2),
+                                  ),
                                 ),
                                 Container(
                                   width: 90,
-                                  margin: const EdgeInsets.fromLTRB(25, 22, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(25, 22, 0, 0),
                                   child: FittedBox(
                                     fit: BoxFit.fill,
                                     child: Switch(
                                       value: isSwitched[index],
-                                      // value: (json.decode(_alarms[index])['switch'].toString().toLowerCase() == 'true' ? true : false),
                                       onChanged: (value) {
                                         setState(() {
                                           isSwitched[index] = value;
@@ -166,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _currentHour = value[0];
               _currentMinute = value[1];
               _snoozeTime = int.parse(value[2]);
+              _alarmSound = value[3];
               _addAlarm(_currentHour, _currentMinute, _snoozeTime, _alarmSound);
             });
           });
