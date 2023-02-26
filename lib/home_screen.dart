@@ -12,16 +12,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentHour = 0;
-  int _currentMinute = 0;
+  int _currentHour = DateTime.now().hour;
+  int _currentMinute = DateTime.now().minute;
   int _snoozeTime = 0;
   late final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final List<String> _alarms = ['{"hour": "11", "minute": "12", "snooze": "0"}', '{"hour": "12", "minute": "13", "snooze": "0"}'];
+  List<String> _alarms = [];
+  // final List<String> _alarms = ['{"hour": "11", "minute": "12", "snooze": "0"}', '{"hour": "12", "minute": "13", "snooze": "0"}'];
 
   void _savedAlarms() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setStringList('alarms', _alarms);
-    print(int.parse(json.decode(prefs.getStringList('alarms')?[0] as String)['minute']));
+    // print(int.parse(json.decode(prefs.getStringList('alarms')?[0] as String)['minute']));
+  }
+
+  void _addAlarm(hour, minute, snooze) async {
+    final SharedPreferences prefs = await _prefs;
+    List<String>? newAlarm = prefs.getStringList('alarms');
+    newAlarm?.add(
+        '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime}');
+    prefs.setStringList('alarms', newAlarm!);
+    _alarms = newAlarm;
+    // print(json.decode(newAlarm[0]));
   }
 
   @override
@@ -38,11 +49,48 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.blueAccent[300],
         title: const Text("Alarm", style: TextStyle(fontSize: 40)),
       ),
-      body: SafeArea (
-        child: Center (
-          child: Column (
+      body: SafeArea(
+        child: Center(
+          child: Column(
             children: <Widget>[
-              Container(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _alarms.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 100,
+                      margin: const EdgeInsets.only(top: 20, bottom: 15),
+                      color: Colors.deepPurple,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  child: Text(
+                                    "${json.decode(_alarms[index])['hour'] / 10 < 1 ?
+                                    "0${json.decode(_alarms[index])['hour']}" : json.decode(_alarms[index])['hour']}"
+                                        ":${json.decode(_alarms[index])['minute'] / 10 < 1 ?
+                                    "0${json.decode(_alarms[index])['minute']}" : json.decode(_alarms[index])['minute']}",
+                                    style:
+                                    const TextStyle(color: Colors.white, fontSize: 50, fontFamily: 'Anton', letterSpacing: 6),
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(10, 30, 0, 0),
+                                  child: Text("snooze: ${json.decode(_alarms[index])['snooze']}", style: const TextStyle(color: Colors.white, fontSize: 25, fontFamily: 'Anton', letterSpacing: 2),),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
               Container(),
               Container(),
             ],
@@ -53,18 +101,13 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => const SetAlarmScreen()),
+            MaterialPageRoute(builder: (context) => const SetAlarmScreen()),
           ).then((value) {
             setState(() {
               _currentHour = value[0];
               _currentMinute = value[1];
               _snoozeTime = int.parse(value[2]);
-              print(_currentHour);
-              print(_currentMinute);
-              print(_snoozeTime);
-              print(DateTime.now().hour);
-              print(DateTime.now().minute);
+              _addAlarm(_currentHour, _currentMinute, _snoozeTime);
             });
           });
         },
