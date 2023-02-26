@@ -191,7 +191,7 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                     ),
                     onPressed: () {
                       Navigator.pop(
-                          context, [_currentHour, _currentMinute, _snoozeTime]);
+                          context, [_currentHour, _currentMinute, _snoozeTime, _alarmSound]);
                     },
                     child: const Text(
                       "Create",

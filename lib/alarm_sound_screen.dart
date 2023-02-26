@@ -81,7 +81,7 @@ class AlarmSoundScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            AudioPlayer().play(AssetSource('sound/alarm1.mp3'));
+                            AudioPlayer().play(AssetSource('sound/alarm2.mp3'));
                           },
                           child: const Text(
                             "alarm 2",
@@ -124,7 +124,7 @@ class AlarmSoundScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            AudioPlayer().play(AssetSource('sound/alarm1.mp3'));
+                            AudioPlayer().play(AssetSource('sound/alarm3.mp3'));
                           },
                           child: const Text(
                             "alarm 3",
@@ -167,7 +167,7 @@ class AlarmSoundScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            AudioPlayer().play(AssetSource('sound/alarm1.mp3'));
+                            AudioPlayer().play(AssetSource('sound/alarm4.mp3'));
                           },
                           child: const Text(
                             "alarm 4",
@@ -210,7 +210,7 @@ class AlarmSoundScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            AudioPlayer().play(AssetSource('sound/alarm1.mp3'));
+                            AudioPlayer().play(AssetSource('sound/alarm5.mp3'));
                           },
                           child: const Text(
                             "alarm 5",

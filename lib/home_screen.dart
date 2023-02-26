@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/set_alarm_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,19 +15,22 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentHour = DateTime.now().hour;
   int _currentMinute = DateTime.now().minute;
   int _snoozeTime = 0;
+  String _alarmSound = 'alarm1';
+
   late final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   List<String> _alarms = [];
+  bool isSwitched = false;
 
   void _savedAlarms() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setStringList('alarms', _alarms);
   }
 
-  void _addAlarm(hour, minute, snooze) async {
+  void _addAlarm(hour, minute, snooze, sound) async {
     final SharedPreferences prefs = await _prefs;
     List<String>? newAlarm = prefs.getStringList('alarms');
     newAlarm?.add(
-        '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime}');
+        '{"hour": $_currentHour, "minute": $_currentMinute, "snooze": $_snoozeTime, "sound": "$_alarmSound", "switch": "false"}');
     prefs.setStringList('alarms', newAlarm!);
     _alarms = newAlarm;
     // print(json.decode(newAlarm[0]));
@@ -78,7 +81,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(10, 30, 0, 0),
                                   child: Text("snooze: ${json.decode(_alarms[index])['snooze']}", style: const TextStyle(color: Colors.white, fontSize: 25, fontFamily: 'Anton', letterSpacing: 2),),
-                                )
+                                ),
+                                Container(
+                                  width: 90,
+                                  margin: const EdgeInsets.fromLTRB(25, 22, 0, 0),
+                                  child: FittedBox(
+                                    fit: BoxFit.fill,
+                                    child: Switch(
+                                      value: isSwitched,
+                                      // value: (json.decode(_alarms[index])['switch'].toString().toLowerCase() == 'true' ? true : false),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isSwitched = value;
+                                        // json.decode(_alarms[index])['switch'] = newValue=='true' ? true:false;
+                                          // if (isSwitched == true) {
+                                          //   if (json.decode(_alarms[index])['hour'] == DateTime.now().hour && json.decode(_alarms[index])['minute'] == DateTime.now().minute) {
+                                          //     AudioPlayer().play(AssetSource('sound/${json.decode(_alarms[index])['sound']}.mp3'));
+                                          //   }
+                                          // }
+                                        });
+                                      },
+                                      activeTrackColor: Colors.lightGreenAccent,
+                                      activeColor: Colors.green,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -103,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _currentHour = value[0];
               _currentMinute = value[1];
               _snoozeTime = int.parse(value[2]);
-              _addAlarm(_currentHour, _currentMinute, _snoozeTime);
+              _addAlarm(_currentHour, _currentMinute, _snoozeTime, _alarmSound);
             });
           });
         },
