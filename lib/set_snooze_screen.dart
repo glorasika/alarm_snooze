@@ -37,7 +37,7 @@ class _SetSnoozeScreen extends State<SetSnoozeScreen> {
                 ),
                 child: NumberPicker (
                   value: _snoozeMinute,
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 15,
                   step: 1,
                   itemHeight: 95,

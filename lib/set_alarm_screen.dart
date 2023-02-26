@@ -10,8 +10,7 @@ class SetAlarmScreen extends StatefulWidget {
 }
 
 class _SetAlarmScreen extends State<SetAlarmScreen> {
-  String _snoozeTime = 'Set';
-
+  String _snoozeTime = '0';
   int _currentHour = DateTime.now().hour;
   int _currentMinute = DateTime.now().minute;
 
@@ -38,7 +37,9 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                   width: 300,
                   decoration: BoxDecoration(
                       // color: Colors.,
-                      border: Border.all(color: Colors.deepPurple, width: 3)),
+                      border: Border.all(color: Colors.deepPurple, width: 3),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  ),
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -130,7 +131,7 @@ class _SetAlarmScreen extends State<SetAlarmScreen> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context, [_currentHour, _currentMinute, _snoozeTime]);
                     },
                     child: const Text(
                       "Create",
