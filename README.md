@@ -37,16 +37,3 @@ and by the time that I finalized my project idea, I only have few days left to i
 so I threw away some of the ideas and at lease implement the feature that 
 answer my pain point first. Although, the app is still not perfect, but with the times I have, 
 I am actually proud of the final product, and most importantly, the app can run without error messages !!
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
