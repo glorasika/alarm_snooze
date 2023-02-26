@@ -17,12 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int _snoozeTime = 0;
   late final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   List<String> _alarms = [];
-  // final List<String> _alarms = ['{"hour": "11", "minute": "12", "snooze": "0"}', '{"hour": "12", "minute": "13", "snooze": "0"}'];
 
   void _savedAlarms() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setStringList('alarms', _alarms);
-    // print(int.parse(json.decode(prefs.getStringList('alarms')?[0] as String)['minute']));
   }
 
   void _addAlarm(hour, minute, snooze) async {
@@ -91,8 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              Container(),
-              Container(),
             ],
           ),
         ),
